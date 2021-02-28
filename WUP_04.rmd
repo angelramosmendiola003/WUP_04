@@ -5,12 +5,14 @@ date: "fall 2021"
 output:
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r include=FALSE,echo=FALSE}
 require(tigerstats)
 require(knitr)
 require(tidyverse)
+read.csv(file= "GSScsv.csv")
 ```
 
 # Introduction
@@ -25,7 +27,7 @@ $H_a$ There is a significant difference in average score on the WORDSUM test bet
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
 
-The two different methods that will be using are, Bloxplots which will show the distribution of WORDSUM and the scores in each of the category's. The second method will be a Numerical summaries which will tell use the average , score as explained by the factors. Tukey will be used to compare the factors in pairs.  
+The two different methods that will be using are, Bloxplots which will show the distribution of WORDSUM and the scores in each of the category's. The second method will be a Numerical summaries which will tell use the average , score as explained by the factors. The ONE WAY ANOVA will be used to compare the factors in pairs.  
 
 # Results
 
@@ -34,18 +36,44 @@ The two different methods that will be using are, Bloxplots which will show the 
 ## Descriptive Results
 
 ### Graphical Descriptive Results
+```{r}
+basicCN <- ggplot(scores,aes(x=WORDSUM,y=DEGREE))
+
+basicCN + geom_boxplot(notch = FALSE, outlier.color = "red") + stat_boxplot(geom = 'errorbar') + labs(title = "DEGREE vs WORDSUM scores")
+```
+The scores above prove that LT High School are much lower than any other scores (except for High School). High School is similar in the aspect  that the scores are more varied for the most part graduates scored higher. The bottom of the Graduate box does not even reach the top if the High School or LT High School boxes. 
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
 ### Numerical Descriptive Results
 
+```{r}
+favstats(WORDSUM~DEGREE,data=scores)
+```
+Similar to the Boxplot, the summary shows that the Graduate students with the highest average WORDSUM scores, but not by a lot, the Junior student are not too far behind, LT and HS have the lowest average.  
+
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
 ## Inferential Results
+
+```{r}
+model1 <- aov(WORDSUM~DEGREE,data=scores)
+summary.aov(model1)
+```
+The probability that all the groups have the same mean is very low:0.0236% which was taken from the P-Value. So the NULL hypothesis is rejected.  
+
+```{r}
+par(mar = c(3, 16, 2, 2))
+plot(TukeyHSD(model1, conf.level = 0.99),las=2)
+```
+
+The most meaningful differences found were between Graduate and High School vs LT High School  
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
 
 
 # Discussion and Conclusion
+
+The alternative hypothesis was that on average there is a significant difference between WORDSUM scores when comparing one factor with another. This hypothesis was confirmed since those with Graduate degrees scored higher than those in LT or High School.
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
