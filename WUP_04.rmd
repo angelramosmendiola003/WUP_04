@@ -8,10 +8,9 @@ output:
 ---
 
 ```{r include=FALSE,echo=FALSE}
+require(tigerstats)
 require(knitr)
 require(tidyverse)
-require(tigerstats)
-scores
 ```
 
 # Introduction
@@ -25,6 +24,8 @@ $H_a$ There is a significant difference in average score on the WORDSUM test bet
 # Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
+
+The two different methods that will be using are, Bloxplots which will show the distribution of WORDSUM and the scores in each of the category's. The second method will be a Numerical summaries which will tell use the average , score as explained by the factors. Tukey will be used to compare the factors in pairs.  
 
 # Results
 
